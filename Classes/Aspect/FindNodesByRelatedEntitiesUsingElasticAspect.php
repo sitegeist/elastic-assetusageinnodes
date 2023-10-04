@@ -78,17 +78,6 @@ class FindNodesByRelatedEntitiesUsingElasticAspect
      */
     protected function getRelatedNodePaths(string $pathPrefix, array $relationMap): array
     {
-        $this->request->queryFilter('bool', [
-            'should' => [
-                [
-                    'term' => ['neos_parent_path ' => $pathPrefix]
-                ],
-                [
-                    'term' => ['neos_path' => $pathPrefix]
-                ]
-            ]
-        ]);
-
         $relatedAssetIdentifiers = [];
 
         foreach ($relationMap as $relatedObjectType => $relatedIdentifiers) {

@@ -15,11 +15,13 @@ use Neos\Flow\Annotations as Flow;
 use Neos\ContentRepository\Domain\Model\NodeInterface;
 use Neos\ContentRepository\Exception\NodeException;
 use Neos\Eel\ProtectedContextAwareInterface;
-use Neos\Flow\Log\PsrSystemLoggerInterface;
 use Neos\Flow\Persistence\PersistenceManagerInterface;
+use Neos\Media\Domain\Model\Image;
+use Neos\Media\Domain\Model\ImageVariant;
 use Neos\Media\Domain\Model\ResourceBasedInterface;
 use Neos\Neos\Service\LinkingService;
-use PunktDe\Elastic\AssetUsageInNodes\Exception\AssetUsageExtractionException;
+use Neos\Utility\TypeHandling;
+use Psr\Log\LoggerInterface;
 
 class AssetUsageHelper implements ProtectedContextAwareInterface
 {
@@ -31,7 +33,7 @@ class AssetUsageHelper implements ProtectedContextAwareInterface
 
     /**
      * @Flow\Inject
-     * @var PsrSystemLoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -125,6 +127,9 @@ class AssetUsageHelper implements ProtectedContextAwareInterface
         foreach ($objects as $object) {
             if ($object instanceof ResourceBasedInterface) {
                 $assetReferences[] = $this->persistenceManager->getIdentifierByObject($object);
+                if ($object instanceof ImageVariant) {
+                    $assetReferences[] = $this->persistenceManager->getIdentifierByObject($object->getOriginalAsset());
+                }
             }
         }
 
