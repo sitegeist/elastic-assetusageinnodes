@@ -60,6 +60,10 @@ class FindNodesByRelatedEntitiesUsingElasticAspect
 
         $relatedNodePaths = $this->getRelatedNodePaths($pathPrefix, $relationMap);
 
+        if (empty($relatedNodePaths)) {
+            return [];
+        }
+
         $query = $this->nodeDataRepository->createQuery();
         $query->matching(
             $query->in('path', $relatedNodePaths)
