@@ -55,7 +55,7 @@ class AssetUsageHelper implements ProtectedContextAwareInterface
             $assetReferences = array_merge($assetReferences, $this->extractReferencedAssetFromProperty($node, $propertyName));
         }
 
-        return array_unique($assetReferences);
+        return array_values(array_unique($assetReferences));
     }
 
     /**
